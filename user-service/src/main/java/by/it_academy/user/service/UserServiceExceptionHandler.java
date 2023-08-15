@@ -41,9 +41,7 @@ public class UserServiceExceptionHandler {
     }
 
     @ExceptionHandler({Exception.class, Error.class})
-    public ResponseEntity<?> handleAnyError(Exception e) {
-        //Todo remove print
-        System.out.println(e.getMessage());
+    public ResponseEntity<?> handleAnyError() {
         TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, "Внутренняя ошибка сервера. Сервер не смог корректно обработать запрос.");
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(500));
     }

@@ -8,6 +8,7 @@ import by.it_academy.user.dao.entity.ConfirmationEntity;
 import by.it_academy.user.dao.entity.UserEntity;
 import by.it_academy.user.service.api.ILoginService;
 import by.it_academy.user.service.api.IUserService;
+import by.it_academy.user.service.exceptions.UserPasswordIncorrectException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @Service
 public class LoginService implements ILoginService {
+    private static final String PASSWORD_INCORRECT = "Неверный пароль.";
 
     private final IUserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -58,16 +60,8 @@ public class LoginService implements ILoginService {
 
     @Override
     public void verify(MailVerification mailVerification) {
-        try{
-            confirmationService.confirmMail(mailVerification.getCode(), mailVerification.getMail());
-        } catch(RuntimeException e) {
-            activateMail(mailVerification.getMail());
-            //ToDo new exception code invalid & verify again
-            throw new RuntimeException();
-        } catch(Exception e) {
-            //todo smth go wrong
-            throw new RuntimeException();
-        }
+        confirmationService.confirmMail(mailVerification.getCode(), mailVerification.getMail());
+
         UserEntity entity = userService.findByMail(mailVerification.getMail());
 
         UserSimleViewWithPass.UserSimpleViewWithPassBuilder builder = new UserSimleViewWithPass.UserSimpleViewWithPassBuilder();
@@ -86,8 +80,7 @@ public class LoginService implements ILoginService {
         String mail = userLogin.getMail();
         UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
         if(!passwordEncoder.matches(userLogin.getPassword(), userDetails.getPassword())) {
-            //TODO exception password does not match
-            throw new RuntimeException();
+            throw new UserPasswordIncorrectException(PASSWORD_INCORRECT, "password");
         }
         return tokenHandler.generateAccessToken(userDetails);
     }

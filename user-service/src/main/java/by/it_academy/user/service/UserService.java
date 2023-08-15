@@ -20,6 +20,10 @@ import java.util.UUID;
 
 @Service
 public class UserService implements IUserService {
+    private static final String USER_DATA_CHANGED = "Информация о пользователе была изменена ранее. Проверьте актуальность используемых данных.";
+    private static final String MAIL_DUPLICATED = "Эта почта уже используется. Введите другой адрес.";
+    private static final String USER_NOT_FOUND = "Пользователь не найден.";
+
 
     private final IUserDao userDao;
     private final PasswordEncoder passwordEncoder;
@@ -42,7 +46,7 @@ public class UserService implements IUserService {
 
         String mail = userCreate.getMail();
         if(userDao.existsByMail(mail)) {
-            throw new UserMailDuplicateException("Эта почта уже используется. Введите другой адрес", "mail");
+            throw new UserMailDuplicateException(MAIL_DUPLICATED, "mail");
         }
 
         entity.setUserId(id);
@@ -61,7 +65,7 @@ public class UserService implements IUserService {
     @Override
     public UserEntity get(UUID uuid) {
         return userDao.findById(uuid).
-                orElseThrow(() -> new UserNotFoundException("Пользователь не найден", "uuid"));
+                orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND, "uuid"));
     }
 
     @Override
@@ -74,10 +78,10 @@ public class UserService implements IUserService {
     public void delete(UUID uuid, LocalDateTime dtUpdate) {
 
         UserEntity entity = userDao.findById(uuid).
-                orElseThrow(() -> new UserNotFoundException("Пользователь не найден", "uuid"));
+                orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND, "uuid"));
 
         if(!dtUpdate.isEqual(entity.getDtUpdate())) {
-            throw new UserInfoChangeException("User information has been changed, check before deleting the user.", "dt_update");
+            throw new UserInfoChangeException(USER_DATA_CHANGED, "dt_update");
         }
 
         userDao.delete(entity);
@@ -87,10 +91,10 @@ public class UserService implements IUserService {
     @Override
     public UserEntity update(UserSimleViewWithPass user, UUID uuid, LocalDateTime dtUpdate) {
         UserEntity entity = userDao.findById(uuid).
-                orElseThrow(() -> new UserNotFoundException("Пользователь не найден", "uuid"));
+                orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND, "uuid"));
 
         if(!entity.getDtUpdate().equals(dtUpdate)) {
-            throw new UserInfoChangeException("User information has been changed, check before updating the user.", "dt_update");
+            throw new UserInfoChangeException(USER_DATA_CHANGED, "dt_update");
         }
 
         UserEntity newEntity = new UserEntity();
@@ -158,7 +162,7 @@ public class UserService implements IUserService {
     @Override
     public UserEntity findByMail(String mail) {
         if(!existsByMail(mail)) {
-            throw new UserNotFoundException("Пользователь не найден", "mail");
+            throw new UserNotFoundException(USER_NOT_FOUND, "mail");
         }
         return userDao.findByMail(mail);
     }

@@ -21,14 +21,6 @@ public class MailSenderService {
         message.setText(text);
         //ToDo variable from
         message.setFrom("task.manager.23.01@gmail.com");
-        try{
-            mailSender.send(message);
-        } catch(MailException e) {
-            //TODO exception for invalid mail
-            throw new RuntimeException(e.getMessage());
-        } catch(Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
+        mailSender.send(message);
     }
 }

@@ -47,13 +47,13 @@ public class SecurityConfig {
                         );
                     });
         });
-//TODO
+
         http.authorizeHttpRequests(requests -> requests
 
                 .requestMatchers( "/api/v1/users/registration").permitAll()
                 .requestMatchers( "/api/v1/users/login").permitAll()
-                //Следующие два пример делают одно и тоже
-                .requestMatchers(HttpMethod.GET,"/api/v1/users**").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/users").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasAnyRole("ADMIN")
                 .requestMatchers("/user/test").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(HttpMethod.GET,"/user/details").authenticated()
                 .anyRequest().authenticated()

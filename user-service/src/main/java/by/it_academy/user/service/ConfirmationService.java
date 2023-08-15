@@ -2,12 +2,19 @@ package by.it_academy.user.service;
 
 import by.it_academy.user.dao.api.IConfirmationDao;
 import by.it_academy.user.dao.entity.ConfirmationEntity;
+import by.it_academy.user.service.exceptions.ActivationCodeInvalidException;
+import by.it_academy.user.service.exceptions.TokenInvalidException;
+import by.it_academy.user.service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
 public class ConfirmationService {
+    private static final String USER_NOT_FOUND = "Пользователь не найден";
+    private static final String TOKEN_EXPIRE = "Срок действия активационного кода истек. Пожалуйста, отправьте повторный запрос для активации почты.";
+    private static final String CODE_INCORRECT = "Неверный код.";
+
     private final IConfirmationDao confirmationDao;
 
     public ConfirmationService(IConfirmationDao confirmationDao) {
@@ -23,18 +30,15 @@ public class ConfirmationService {
         try{
              entity = confirmationDao.findByMail(mail);
         } catch(RuntimeException e) {
-            //ToDo exception
-            throw new RuntimeException(e.getMessage());
+            throw new UserNotFoundException(USER_NOT_FOUND, "mail");
         }
 
         if(entity.getDtCreate().plusMinutes(30).isBefore(LocalDateTime.now())) {
             confirmationDao.delete(entity);
-            //TODO new exception code exp.
-            throw new RuntimeException();
+            throw new TokenInvalidException(TOKEN_EXPIRE);
         }
         if(!code.equals(entity.getCode())) {
-            //TODO new exception code exp.
-            throw new RuntimeException();
+            throw new ActivationCodeInvalidException(CODE_INCORRECT);
         }
     }
 }
