@@ -1,6 +1,6 @@
 package by.it_academy.user.controller;
 
-import by.it_academy.user.core.dto.User;
+import by.it_academy.user.core.dto.UserView;
 import by.it_academy.user.core.dto.UserSimleViewWithPass;
 import by.it_academy.user.dao.entity.UserEntity;
 import by.it_academy.user.service.api.IUserService;
@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-       TPage<User> page1 = userService.getPage(page, size);
+       TPage<UserView> page1 = userService.getPage(page, size);
 
 
         return new ResponseEntity<>(page1, HttpStatus.valueOf(200));
@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping(value = "/{uuid}", produces = "application/json")
     public ResponseEntity<?> getUser(@PathVariable UUID uuid) {
-        User user = userService.entityToDto(userService.get(uuid));
+        UserView user = userService.entityToDto(userService.get(uuid));
 
         return new ResponseEntity<>(user, HttpStatus.valueOf(200));
     }

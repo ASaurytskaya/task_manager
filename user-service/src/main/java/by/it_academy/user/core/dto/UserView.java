@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class User {
+public class UserView {
 
     private final UUID uuid;
 
@@ -27,7 +27,7 @@ public class User {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final UserStatus userStatus;
 
-    private User(UserBuilder builder) {
+    private UserView(UserBuilder builder) {
         this.uuid = builder.uuid;
         this.dtCreate = builder.dtCreate;
         this.dtUpdate = builder.dtUpdate;
@@ -131,8 +131,8 @@ public class User {
             return this;
         }
 
-        public User build() {
-            return new User(this);
+        public UserView build() {
+            return new UserView(this);
         }
     }
 }
