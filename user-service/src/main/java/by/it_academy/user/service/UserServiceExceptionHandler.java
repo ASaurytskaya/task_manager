@@ -15,11 +15,13 @@ import java.util.HashMap;
 
 @ControllerAdvice
 public class UserServiceExceptionHandler {
+    private static final String STATUS_400 = "Запрос содержит некорректные данные. Измените запрос и отправьте его ещё раз.";
+    private static final String STATUS_500 = "Внутренняя ошибка сервера. Сервер не смог корректно обработать запрос.";
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handleBadRequestError() {
 
-        TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, "Запрос содержит некорректные данные. Измените запрос и отправьте его ещё раз.");
+        TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, STATUS_400);
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(400));
     }
 
@@ -42,7 +44,7 @@ public class UserServiceExceptionHandler {
 
     @ExceptionHandler({Exception.class, Error.class})
     public ResponseEntity<?> handleAnyError() {
-        TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, "Внутренняя ошибка сервера. Сервер не смог корректно обработать запрос.");
+        TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, STATUS_500);
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(500));
     }
 
