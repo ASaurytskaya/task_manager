@@ -86,12 +86,12 @@ public class LoginService implements ILoginService {
     }
 
     @Override
-    public User about() {
+    public UserView about() {
         UserDetails userDetails = userHolder.getUser();
         String mail = userDetails.getUsername();
         UserEntity entity = userService.findByMail(mail);
-        User.UserBuilder builder = new User.UserBuilder();
-        User user = builder.
+        UserView.UserBuilder builder = new UserView.UserBuilder();
+        UserView user = builder.
                 setUuid(entity.getUserId()).
                 setDtCreate(entity.getDtCreate()).
                 setDtUpdate(entity.getDtUpdate()).

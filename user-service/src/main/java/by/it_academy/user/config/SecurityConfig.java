@@ -50,12 +50,10 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
 
-                .requestMatchers( "/api/v1/users/registration").permitAll()
-                .requestMatchers( "/api/v1/users/login").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/v1/users").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.GET,"/api/v1/users/**").hasAnyRole("ADMIN")
-                .requestMatchers("/user/test").hasAnyAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.GET,"/user/details").authenticated()
+                .requestMatchers( "/api/v1/users/registration", "/api/v1/users/login").
+                permitAll()
+                .requestMatchers(HttpMethod.GET,"/user/test", "/api/v1/users", "/api/v1/users/**").
+                hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
         );
 

@@ -1,6 +1,6 @@
 package by.it_academy.user.service.api;
 
-import by.it_academy.user.core.dto.User;
+import by.it_academy.user.core.dto.UserView;
 import by.it_academy.user.core.dto.UserSimleViewWithPass;
 import by.it_academy.user.dao.entity.UserEntity;
 import by.it_academy.user.util.TPage;
@@ -20,9 +20,9 @@ public interface IUserService {
 
     UserEntity update(UserSimleViewWithPass userUpdate, UUID uuid, LocalDateTime dtUpdate);
 
-    TPage<User> getPage(int page, int size);
+    TPage<UserView> getPage(int page, int size);
 
-    User entityToDto(UserEntity entity);
+    UserView entityToDto(UserEntity entity);
 
     boolean existsByMail(String mail);
 

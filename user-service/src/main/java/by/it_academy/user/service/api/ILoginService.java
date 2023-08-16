@@ -10,5 +10,5 @@ public interface ILoginService {
 
     String logIn(UserLogin userLogin);
 
-    User about();
+    UserView about();
 }

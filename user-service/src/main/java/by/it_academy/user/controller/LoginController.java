@@ -43,7 +43,7 @@ public class LoginController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getAbout() {
-        User user = loginService.about();
+        UserView user = loginService.about();
         return new ResponseEntity<>(user, HttpStatus.valueOf(200));
     }
 }

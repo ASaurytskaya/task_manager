@@ -113,8 +113,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public TPage<User> getPage(int page, int size) {
-        TPage<User> pageResult = new TPage<>();
+    public TPage<UserView> getPage(int page, int size) {
+        TPage<UserView> pageResult = new TPage<>();
         List<UserEntity> allEntities = this.getAll();
         int countEntities = allEntities.size();
         int countPages = (int) Math.ceil(countEntities / (double) size );
@@ -139,8 +139,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User entityToDto(UserEntity userEntity) {
-        User user = new User.UserBuilder().
+    public UserView entityToDto(UserEntity userEntity) {
+        UserView user = new UserView.UserBuilder().
                 setUuid(userEntity.getUserId()).
                 setDtCreate(userEntity.getDtCreate()).
                 setDtUpdate(userEntity.getDtUpdate()).
