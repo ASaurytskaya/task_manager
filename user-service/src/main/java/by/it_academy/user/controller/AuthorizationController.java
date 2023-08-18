@@ -1,25 +1,22 @@
 package by.it_academy.user.controller;
 
-import by.it_academy.user.controller.utils.JwtTokenHandler;
 import by.it_academy.user.core.dto.*;
-import by.it_academy.user.service.api.ILoginService;
+import by.it_academy.user.service.api.IAuthorizationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
-public class LoginController {
+public class AuthorizationController {
 
+    private final IAuthorizationService loginService;
 
-    private final ILoginService loginService;
-    private final JwtTokenHandler jwtHandler;
-
-    public LoginController(ILoginService loginService, JwtTokenHandler jwtHandler) {
+    public AuthorizationController(IAuthorizationService loginService) {
         this.loginService = loginService;
-        this.jwtHandler = jwtHandler;
     }
 
     @PostMapping("/registration")
@@ -30,7 +27,7 @@ public class LoginController {
     }
 
     @GetMapping("/verification")
-    public ResponseEntity<?> validate(@RequestParam String mail, @RequestParam String code) {
+    public ResponseEntity<?> validate(@RequestParam String mail, @RequestParam UUID code) {
         loginService.verify(new MailVerification(mail, code));
         return new ResponseEntity<>(HttpStatus.valueOf(200));
     }

@@ -27,7 +27,7 @@ public class UserView {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final UserStatus userStatus;
 
-    private UserView(UserBuilder builder) {
+    private UserView(UserViewBuilder builder) {
         this.uuid = builder.uuid;
         this.dtCreate = builder.dtCreate;
         this.dtUpdate = builder.dtUpdate;
@@ -65,7 +65,7 @@ public class UserView {
         return userStatus;
     }
 
-    public static class UserBuilder {
+    public static class UserViewBuilder {
         private UUID uuid;
         private LocalDateTime dtCreate;
         private LocalDateTime dtUpdate;
@@ -74,9 +74,9 @@ public class UserView {
         private UserRole userRole;
         private UserStatus userStatus;
 
-        public UserBuilder() {}
+        public UserViewBuilder() {}
 
-        public UserBuilder(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String mail, String fio, UserRole userRole, UserStatus userStatus) {
+        public UserViewBuilder(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String mail, String fio, UserRole userRole, UserStatus userStatus) {
             this.uuid = uuid;
             this.dtCreate = dtCreate;
             this.dtUpdate = dtUpdate;
@@ -86,47 +86,47 @@ public class UserView {
             this.userStatus = userStatus;
         }
 
-        public UserBuilder setUuid(UUID uuid) {
+        public UserViewBuilder setUuid(UUID uuid) {
             this.uuid = uuid;
             return this;
         }
 
-        public UserBuilder setDtCreate(LocalDateTime dtCreate) {
+        public UserViewBuilder setDtCreate(LocalDateTime dtCreate) {
             this.dtCreate = dtCreate;
             return this;
         }
 
-        public UserBuilder setDtUpdate(LocalDateTime dtUpdate) {
+        public UserViewBuilder setDtUpdate(LocalDateTime dtUpdate) {
             this.dtUpdate = dtUpdate;
             return this;
         }
 
-        public UserBuilder setMail(String mail) {
+        public UserViewBuilder setMail(String mail) {
             this.mail = mail;
             return this;
         }
 
-        public UserBuilder setFio(String fio) {
+        public UserViewBuilder setFio(String fio) {
             this.fio = fio;
             return this;
         }
 
-        public UserBuilder setUserRole(String userRole) {
+        public UserViewBuilder setUserRole(String userRole) {
             this.userRole = UserRole.valueOf(userRole);
             return this;
         }
 
-        public UserBuilder setUserRole(UserRole userRole) {
+        public UserViewBuilder setUserRole(UserRole userRole) {
             this.userRole = userRole;
             return this;
         }
 
-        public UserBuilder setUserStatus(String userStatus) {
+        public UserViewBuilder setUserStatus(String userStatus) {
             this.userStatus = UserStatus.valueOf(userStatus);
             return this;
         }
 
-        public UserBuilder setUserStatus(UserStatus userStatus) {
+        public UserViewBuilder setUserStatus(UserStatus userStatus) {
             this.userStatus = userStatus;
             return this;
         }

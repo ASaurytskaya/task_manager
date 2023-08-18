@@ -1,13 +1,15 @@
 package by.it_academy.user.core.dto;
 
+import java.util.UUID;
+
 public class MailVerification {
     private String mail;
-    private String code;
+    private UUID code;
 
     public MailVerification() {
     }
 
-    public MailVerification(String mail, String code) {
+    public MailVerification(String mail, UUID code) {
         this.mail = mail;
         this.code = code;
     }
@@ -21,11 +23,11 @@ public class MailVerification {
         return this;
     }
 
-    public String getCode() {
+    public UUID getCode() {
         return code;
     }
 
-    public MailVerification setCode(String code) {
+    public MailVerification setCode(UUID code) {
         this.code = code;
         return this;
     }

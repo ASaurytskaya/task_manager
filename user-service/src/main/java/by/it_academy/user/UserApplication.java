@@ -5,6 +5,7 @@ import by.it_academy.user.service.MailSenderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @EnableJpaRepositories
 @EnableTransactionManagement
 @EnableConfigurationProperties(JWTProperty.class)
+@EnableFeignClients
 @SpringBootApplication
 public class UserApplication {
 

@@ -1,5 +1,6 @@
 package by.it_academy.user.controller;
 
+import by.it_academy.user.config.converter.DateConverter;
 import by.it_academy.user.core.dto.UserView;
 import by.it_academy.user.core.dto.UserSimleViewWithPass;
 import by.it_academy.user.dao.entity.UserEntity;
@@ -18,9 +19,11 @@ import java.util.UUID;
 public class UserController {
 
     private final IUserService userService;
+    private final DateConverter dateConverter;
 
-    public UserController(IUserService userService) {
+    public UserController(IUserService userService, DateConverter dateConverter) {
         this.userService = userService;
+        this.dateConverter = dateConverter;
     }
 
     @GetMapping(produces = "application/json")
@@ -49,8 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}/dt_update/{dt_update}")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserSimleViewWithPass user, @PathVariable UUID uuid, @PathVariable String dt_update) {
-        LocalDateTime dtUpdate = LocalDateTime.parse(dt_update);
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserSimleViewWithPass user, @PathVariable UUID uuid, @PathVariable(name = "dt_update") LocalDateTime dtUpdate) {
         userService.update(user, uuid, dtUpdate);
         return new ResponseEntity<>(HttpStatus.valueOf( 200));
     }

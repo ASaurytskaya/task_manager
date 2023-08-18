@@ -54,17 +54,15 @@ public class JwtTokenHandler {
             Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
-            //ToDo audit
-           // throw new TokenInvalidException("Invalid JWT signature");
+            throw new TokenInvalidException("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-         //   throw new TokenInvalidException("Invalid JWT token");
+            throw new TokenInvalidException("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-          //  throw new TokenInvalidException("Expired JWT token");
+            throw new TokenInvalidException("Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-         //   throw new TokenInvalidException("Unsupported JWT token");
+            throw new TokenInvalidException("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-          //  throw new TokenInvalidException("JWT claims string is empty");
+            throw new TokenInvalidException("JWT claims string is empty");
         }
-        return false;
     }
 }

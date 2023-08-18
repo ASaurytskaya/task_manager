@@ -42,14 +42,12 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
         if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Get user identity and set it on the spring security context
         UserDetails userDetails = userDetailsService
                 .loadUserByUsername(jwtHandler.getUsername(token));
 

@@ -2,7 +2,7 @@ package by.it_academy.user.service.api;
 
 import by.it_academy.user.core.dto.*;
 
-public interface ILoginService {
+public interface IAuthorizationService {
 
     String register(UserRegistration userRegistration);
 

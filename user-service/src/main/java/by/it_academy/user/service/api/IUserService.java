@@ -27,6 +27,4 @@ public interface IUserService {
     boolean existsByMail(String mail);
 
     UserEntity findByMail(String mail);
-
-    boolean existsById(UUID uuid);
 }

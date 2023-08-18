@@ -8,6 +8,7 @@ import by.it_academy.user.service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class ConfirmationService {
@@ -25,7 +26,7 @@ public class ConfirmationService {
         confirmationDao.save(entity);
     }
 
-    public void confirmMail(String code, String mail) {
+    public void confirmMail(UUID code, String mail) {
         ConfirmationEntity entity = null;
         try{
              entity = confirmationDao.findByMail(mail);

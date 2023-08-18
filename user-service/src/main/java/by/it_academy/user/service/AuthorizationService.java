@@ -6,9 +6,10 @@ import by.it_academy.user.core.UserStatus;
 import by.it_academy.user.core.dto.*;
 import by.it_academy.user.dao.entity.ConfirmationEntity;
 import by.it_academy.user.dao.entity.UserEntity;
-import by.it_academy.user.service.api.ILoginService;
+import by.it_academy.user.service.api.IAuthorizationService;
 import by.it_academy.user.service.api.IUserService;
 import by.it_academy.user.service.exceptions.UserPasswordIncorrectException;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-public class LoginService implements ILoginService {
+public class AuthorizationService implements IAuthorizationService {
     private static final String PASSWORD_INCORRECT = "Неверный пароль.";
 
     private final IUserService userService;
@@ -30,9 +31,9 @@ public class LoginService implements ILoginService {
 
     private final MailSenderService mailSenderService;
 
-    public LoginService(IUserService userService, PasswordEncoder passwordEncoder, UserHolder userHolder,
-                        UserDetailsService userDetailsService, JwtTokenHandler tokenHandler,
-                        ConfirmationService confirmationService, MailSenderService mailSenderService) {
+    public AuthorizationService(IUserService userService, PasswordEncoder passwordEncoder, UserHolder userHolder,
+                                UserDetailsService userDetailsService, JwtTokenHandler tokenHandler,
+                                ConfirmationService confirmationService, MailSenderService mailSenderService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.userHolder = userHolder;
@@ -42,6 +43,7 @@ public class LoginService implements ILoginService {
         this.mailSenderService = mailSenderService;
     }
 
+    @Transactional
     @Override
     public String register(UserRegistration userRegistration) {
         UserSimleViewWithPass.UserSimpleViewWithPassBuilder builder = new UserSimleViewWithPass.UserSimpleViewWithPassBuilder();
@@ -90,7 +92,7 @@ public class LoginService implements ILoginService {
         UserDetails userDetails = userHolder.getUser();
         String mail = userDetails.getUsername();
         UserEntity entity = userService.findByMail(mail);
-        UserView.UserBuilder builder = new UserView.UserBuilder();
+        UserView.UserViewBuilder builder = new UserView.UserViewBuilder();
         UserView user = builder.
                 setUuid(entity.getUserId()).
                 setDtCreate(entity.getDtCreate()).
@@ -103,7 +105,7 @@ public class LoginService implements ILoginService {
     }
 
     private void activateMail(String mail) {
-        String code = UUID.randomUUID().toString();
+        UUID code = UUID.randomUUID();
         ConfirmationEntity entity = new ConfirmationEntity(UUID.randomUUID(), mail, LocalDateTime.now(), code);
         confirmationService.save(entity);
 

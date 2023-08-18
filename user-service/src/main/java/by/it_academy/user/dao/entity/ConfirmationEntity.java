@@ -20,12 +20,12 @@ public class ConfirmationEntity {
     private LocalDateTime dtCreate;
 
     @NotNull
-    private String code;
+    private UUID code;
 
     public ConfirmationEntity() {
     }
 
-    public ConfirmationEntity(UUID id, String mail, LocalDateTime dtCreate, String code) {
+    public ConfirmationEntity(UUID id, String mail, LocalDateTime dtCreate, UUID code) {
         this.id = id;
         this.mail = mail;
         this.dtCreate = dtCreate;
@@ -59,11 +59,11 @@ public class ConfirmationEntity {
         return this;
     }
 
-    public String getCode() {
+    public UUID getCode() {
         return code;
     }
 
-    public ConfirmationEntity setCode(String code) {
+    public ConfirmationEntity setCode(UUID code) {
         this.code = code;
         return this;
     }

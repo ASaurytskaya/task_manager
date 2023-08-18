@@ -9,9 +9,9 @@ import by.it_academy.user.service.exceptions.UserInfoChangeException;
 import by.it_academy.user.service.exceptions.UserMailDuplicateException;
 import by.it_academy.user.service.exceptions.UserNotFoundException;
 import by.it_academy.user.util.TPage;
-import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,13 +24,18 @@ public class UserService implements IUserService {
     private static final String MAIL_DUPLICATED = "Эта почта уже используется. Введите другой адрес.";
     private static final String USER_NOT_FOUND = "Пользователь не найден.";
 
+    private static final String USER_CREATED  = "Создан новый пользователь";
+    private static final String USER_UPDATED = "Обновлена информация о пользователе";
+
 
     private final IUserDao userDao;
     private final PasswordEncoder passwordEncoder;
+    private final AuditService auditService;
 
-    public UserService(IUserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(IUserDao userDao, PasswordEncoder passwordEncoder, AuditService auditService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
     }
 
     @Transactional
@@ -58,16 +63,21 @@ public class UserService implements IUserService {
         entity.setUserRole(userCreate.getUserRole());
         entity.setUserStatus(userCreate.getUserStatus());
 
-        return userDao.saveAndFlush(entity);
+        UserEntity returnedEntity = userDao.saveAndFlush(entity);
+        auditService.saveToAudit(returnedEntity, USER_CREATED);
+
+        return returnedEntity;
     }
 
 
+    @Transactional(readOnly = true)
     @Override
     public UserEntity get(UUID uuid) {
         return userDao.findById(uuid).
                 orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND, "uuid"));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserEntity> getAll() {
         return userDao.findAll();
@@ -109,9 +119,13 @@ public class UserService implements IUserService {
         newEntity.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userDao.delete(entity);
-        return userDao.save(newEntity);
+        UserEntity returnedEntity = userDao.saveAndFlush(entity);
+        auditService.saveToAudit(returnedEntity, USER_UPDATED);
+
+        return returnedEntity;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public TPage<UserView> getPage(int page, int size) {
         TPage<UserView> pageResult = new TPage<>();
@@ -140,7 +154,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserView entityToDto(UserEntity userEntity) {
-        UserView user = new UserView.UserBuilder().
+        UserView user = new UserView.UserViewBuilder().
                 setUuid(userEntity.getUserId()).
                 setDtCreate(userEntity.getDtCreate()).
                 setDtUpdate(userEntity.getDtUpdate()).
@@ -151,8 +165,6 @@ public class UserService implements IUserService {
                 build();
         return user;
     }
-
-
 
     @Override
     public boolean existsByMail(String mail) {
@@ -165,10 +177,5 @@ public class UserService implements IUserService {
             throw new UserNotFoundException(USER_NOT_FOUND, "mail");
         }
         return userDao.findByMail(mail);
-    }
-
-    @Override
-    public boolean existsById(UUID uuid) {
-        return userDao.existsById(uuid);
     }
 }
