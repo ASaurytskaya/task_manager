@@ -3,6 +3,7 @@ package by.it_academy.audit.core.dto;
 import by.it_academy.audit.core.EssenceType;
 
 public class AuditCreate {
+    private User user;
 
     private String text;
 
@@ -13,7 +14,8 @@ public class AuditCreate {
     public AuditCreate() {
     }
 
-    public AuditCreate(String text, EssenceType type, String id) {
+    public AuditCreate(User user, String text, EssenceType type, String id) {
+        this.user = user;
         this.text = text;
         this.type = type;
         this.id = id;
@@ -41,5 +43,14 @@ public class AuditCreate {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public AuditCreate setUser(User user) {
+        this.user = user;
+        return this;
     }
 }

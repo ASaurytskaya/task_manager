@@ -6,6 +6,8 @@ public class AuditCreate {
 
     private String text;
 
+    private UserSimpleViewWithId user;
+
     private EssenceType type;
 
     private String id;
@@ -13,8 +15,9 @@ public class AuditCreate {
     public AuditCreate() {
     }
 
-    public AuditCreate(String text, EssenceType type, String id) {
+    public AuditCreate(String text, UserSimpleViewWithId user, EssenceType type, String id) {
         this.text = text;
+        this.user = user;
         this.type = type;
         this.id = id;
     }
@@ -41,5 +44,14 @@ public class AuditCreate {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public UserSimpleViewWithId getUser() {
+        return user;
+    }
+
+    public AuditCreate setUser(UserSimpleViewWithId user) {
+        this.user = user;
+        return this;
     }
 }

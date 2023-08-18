@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserFinderService {
-    private final IUserClient userClient;
+    private IUserClient userClient;
 
     public UserFinderService(IUserClient userClient) {
         this.userClient = userClient;

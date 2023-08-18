@@ -1,5 +1,6 @@
 package by.it_academy.audit.config;
 
+import by.it_academy.audit.controller.filter.JwtFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter filter) throws Exception  {
         http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
 
@@ -45,6 +46,11 @@ public class SecurityConfig {
                     hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
         );
+
+        http.addFilterBefore(
+                filter, UsernamePasswordAuthenticationFilter.class
+        );
+
 
         return http.build();
     }
