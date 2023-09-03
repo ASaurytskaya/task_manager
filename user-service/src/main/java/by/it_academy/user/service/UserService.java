@@ -1,7 +1,7 @@
 package by.it_academy.user.service;
 
 import by.it_academy.user.core.dto.*;
-import by.it_academy.user.core.dto.UserSimleViewWithPass;
+import by.it_academy.user.core.dto.UserSimpleViewWithPass;
 import by.it_academy.user.dao.api.IUserDao;
 import by.it_academy.user.dao.entity.UserEntity;
 import by.it_academy.user.service.api.IUserService;
@@ -40,7 +40,7 @@ public class UserService implements IUserService {
 
     @Transactional
     @Override
-    public UserEntity save(UserSimleViewWithPass userCreate) {
+    public UserEntity save(UserSimpleViewWithPass userCreate) {
         UserEntity entity = new UserEntity();
 
         UUID id = UUID.randomUUID();
@@ -77,12 +77,6 @@ public class UserService implements IUserService {
                 orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND, "uuid"));
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<UserEntity> getAll() {
-        return userDao.findAll();
-    }
-
     @Transactional
     @Override
     public void delete(UUID uuid, LocalDateTime dtUpdate) {
@@ -99,7 +93,7 @@ public class UserService implements IUserService {
 
     @Transactional
     @Override
-    public UserEntity update(UserSimleViewWithPass user, UUID uuid, LocalDateTime dtUpdate) {
+    public UserEntity update(UserSimpleViewWithPass user, UUID uuid, LocalDateTime dtUpdate) {
         UserEntity entity = userDao.findById(uuid).
                 orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND, "uuid"));
 
@@ -116,10 +110,15 @@ public class UserService implements IUserService {
         newEntity.setFio(user.getFio());
         newEntity.setUserRole(user.getUserRole());
         newEntity.setUserStatus(user.getUserStatus());
-        newEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        String pass = user.getPassword();
+        if(!pass.equals(entity.getPassword())) {
+            pass = passwordEncoder.encode(pass);
+        }
+        newEntity.setPassword(pass);
 
         userDao.delete(entity);
-        UserEntity returnedEntity = userDao.saveAndFlush(entity);
+        UserEntity returnedEntity = userDao.saveAndFlush(newEntity);
         auditService.saveToAudit(returnedEntity, USER_UPDATED);
 
         return returnedEntity;
@@ -129,7 +128,7 @@ public class UserService implements IUserService {
     @Override
     public TPage<UserView> getPage(int page, int size) {
         TPage<UserView> pageResult = new TPage<>();
-        List<UserEntity> allEntities = this.getAll();
+        List<UserEntity> allEntities = userDao.findAll();
         int countEntities = allEntities.size();
         int countPages = (int) Math.ceil(countEntities / (double) size );
 
@@ -141,7 +140,7 @@ public class UserService implements IUserService {
         pageResult.setSize(size);
         pageResult.setTotal_element(countEntities);
         pageResult.setFirst(page == 0);
-        pageResult.setLast(page == countPages - 1);
+        pageResult.setLast(countPages == 0 || page == countPages - 1);
         int count = 0;
         pageResult.setContent(new ArrayList<>());
         for(int i = page * size; i <= (page + 1) * size && i < countEntities; i++) {

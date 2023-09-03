@@ -14,12 +14,14 @@ public class ConfirmationEntity {
     private UUID id;
 
     @NotNull
+    @Column(name = "mail")
     private String mail;
 
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
 
     @NotNull
+    @Column(name = "code")
     private UUID code;
 
     public ConfirmationEntity() {
@@ -36,35 +38,31 @@ public class ConfirmationEntity {
         return id;
     }
 
-    public ConfirmationEntity setId(UUID id) {
+    public void setId(UUID id) {
         this.id = id;
-        return this;
     }
 
     public String getMail() {
         return mail;
     }
 
-    public ConfirmationEntity setMail(String mail) {
+    public void setMail(String mail) {
         this.mail = mail;
-        return this;
     }
 
     public LocalDateTime getDtCreate() {
         return dtCreate;
     }
 
-    public ConfirmationEntity setDtCreate(LocalDateTime dtCreate) {
+    public void setDtCreate(LocalDateTime dtCreate) {
         this.dtCreate = dtCreate;
-        return this;
     }
 
     public UUID getCode() {
         return code;
     }
 
-    public ConfirmationEntity setCode(UUID code) {
+    public void setCode(UUID code) {
         this.code = code;
-        return this;
     }
 }

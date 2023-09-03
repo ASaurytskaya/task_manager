@@ -46,18 +46,25 @@ public class AuthorizationService implements IAuthorizationService {
     @Transactional
     @Override
     public String register(UserRegistration userRegistration) {
-        UserSimleViewWithPass.UserSimpleViewWithPassBuilder builder = new UserSimleViewWithPass.UserSimpleViewWithPassBuilder();
-        UserSimleViewWithPass user = builder.
+        UserSimpleViewWithPass.UserSimpleViewWithPassBuilder builder = new UserSimpleViewWithPass.UserSimpleViewWithPassBuilder();
+        UserSimpleViewWithPass user = builder.
                 setMail(userRegistration.getMail()).
                 setFio(userRegistration.getFio()).
                 setUserRole(UserRole.USER).
                 setUserStatus(UserStatus.WAITING_ACTIVATION).
                 setPassword(passwordEncoder.encode(userRegistration.getPassword())).build();
-        userService.save(user);
+        UserEntity entity = userService.save(user);
 
         activateMail(userRegistration.getMail());
+        CustomUserDetails userDetails = new CustomUserDetails.CustomUserDetailsBuilder().
+                setId(entity.getUserId()).
+                setFio(entity.getFio()).
+                setMail(entity.getMail()).
+                setUserRole(entity.getUserRole()).
+                setUserStatus(entity.getUserStatus()).
+                setPassword(entity.getPassword()).build();
 
-        return tokenHandler.generateAccessToken(user);
+        return tokenHandler.generateAccessToken(userDetails);
     }
 
     @Override
@@ -66,8 +73,8 @@ public class AuthorizationService implements IAuthorizationService {
 
         UserEntity entity = userService.findByMail(mailVerification.getMail());
 
-        UserSimleViewWithPass.UserSimpleViewWithPassBuilder builder = new UserSimleViewWithPass.UserSimpleViewWithPassBuilder();
-        UserSimleViewWithPass user = builder.setMail(entity.getMail()).
+        UserSimpleViewWithPass.UserSimpleViewWithPassBuilder builder = new UserSimpleViewWithPass.UserSimpleViewWithPassBuilder();
+        UserSimpleViewWithPass user = builder.setMail(entity.getMail()).
                 setFio(entity.getFio()).
                 setUserRole(entity.getUserRole()).
                 setPassword(entity.getPassword()).
@@ -80,7 +87,7 @@ public class AuthorizationService implements IAuthorizationService {
     @Override
     public String logIn(UserLogin userLogin) {
         String mail = userLogin.getMail();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(mail);
+        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(mail);
         if(!passwordEncoder.matches(userLogin.getPassword(), userDetails.getPassword())) {
             throw new UserPasswordIncorrectException(PASSWORD_INCORRECT, "password");
         }

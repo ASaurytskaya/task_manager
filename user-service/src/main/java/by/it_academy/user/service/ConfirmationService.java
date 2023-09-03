@@ -27,7 +27,8 @@ public class ConfirmationService {
     }
 
     public void confirmMail(UUID code, String mail) {
-        ConfirmationEntity entity = null;
+        ConfirmationEntity entity;
+
         try{
              entity = confirmationDao.findByMail(mail);
         } catch(RuntimeException e) {

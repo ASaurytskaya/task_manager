@@ -2,7 +2,7 @@ package by.it_academy.user.controller;
 
 import by.it_academy.user.config.converter.DateConverter;
 import by.it_academy.user.core.dto.UserView;
-import by.it_academy.user.core.dto.UserSimleViewWithPass;
+import by.it_academy.user.core.dto.UserSimpleViewWithPass;
 import by.it_academy.user.dao.entity.UserEntity;
 import by.it_academy.user.service.api.IUserService;
 import by.it_academy.user.util.TPage;
@@ -43,16 +43,16 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus
-    public ResponseEntity<?> addUser(@Valid @RequestBody UserSimleViewWithPass user) {
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserSimpleViewWithPass user) {
         UserEntity entity = userService.save(user);
         if(entity != null) {
             return new ResponseEntity<>(HttpStatus.valueOf( 201));
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.valueOf( 500));
     }
 
     @PutMapping("/{uuid}/dt_update/{dt_update}")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserSimleViewWithPass user, @PathVariable UUID uuid, @PathVariable(name = "dt_update") LocalDateTime dtUpdate) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserSimpleViewWithPass user, @PathVariable UUID uuid, @PathVariable(name = "dt_update") LocalDateTime dtUpdate) {
         userService.update(user, uuid, dtUpdate);
         return new ResponseEntity<>(HttpStatus.valueOf( 200));
     }

@@ -1,7 +1,7 @@
 package by.it_academy.user.controller.filter;
 
 import by.it_academy.user.controller.utils.JwtTokenHandler;
-import by.it_academy.user.service.CommonUserDetailsService;
+import by.it_academy.user.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,11 +21,12 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+    private static final String BEARER = "Bearer";
 
-    private final CommonUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
     private final JwtTokenHandler jwtHandler;
 
-    public JwtFilter(CommonUserDetailsService userDetailsService, JwtTokenHandler jwtHandler) {
+    public JwtFilter(CustomUserDetailsService userDetailsService, JwtTokenHandler jwtHandler) {
         this.userDetailsService = userDetailsService;
         this.jwtHandler = jwtHandler;
     }
@@ -37,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (isEmpty(header) || !header.startsWith("Bearer ")) {
+        if (isEmpty(header) || !header.startsWith(BEARER)) {
             chain.doFilter(request, response);
             return;
         }

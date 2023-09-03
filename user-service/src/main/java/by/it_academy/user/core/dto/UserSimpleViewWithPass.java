@@ -7,15 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-
-public class UserSimleViewWithPass implements UserDetails {
+public class UserSimpleViewWithPass {
     @NotBlank
     private final String mail;
 
@@ -34,7 +27,7 @@ public class UserSimleViewWithPass implements UserDetails {
     private final String password;
 
     @JsonCreator
-    private UserSimleViewWithPass(UserSimpleViewWithPassBuilder builder) {
+    private UserSimpleViewWithPass(UserSimpleViewWithPassBuilder builder) {
         this.mail = builder.mail;
         this.fio = builder.fio;
         this.userRole = builder.userRole;
@@ -58,42 +51,8 @@ public class UserSimleViewWithPass implements UserDetails {
         return userStatus;
     }
 
-    @Override
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> list = new ArrayList<>();
-        list.add(getUserRole());
-        list.add(getUserStatus());
-        return list;
-    }
-
-    @Override
-    public String getUsername() {
-        return getMail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     @JsonDeserialize
@@ -144,8 +103,8 @@ public class UserSimleViewWithPass implements UserDetails {
             return this;
         }
 
-        public UserSimleViewWithPass build() {
-            return new UserSimleViewWithPass(this);
+        public UserSimpleViewWithPass build() {
+            return new UserSimpleViewWithPass(this);
         }
 
 

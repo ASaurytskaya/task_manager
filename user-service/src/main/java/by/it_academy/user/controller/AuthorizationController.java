@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 @RestController
@@ -22,8 +23,7 @@ public class AuthorizationController {
     @PostMapping("/registration")
     public ResponseEntity<?> registration(@Valid @RequestBody UserRegistration userRegistration) {
         String token = loginService.register(userRegistration);
-
-        return new ResponseEntity<>(token, HttpStatus.CREATED);
+        return new ResponseEntity<>(new HashMap<String, String>(1){{put("token", token);}}, HttpStatus.CREATED);
     }
 
     @GetMapping("/verification")
@@ -35,7 +35,7 @@ public class AuthorizationController {
     @GetMapping("/login")
     public ResponseEntity<?> logIn(@Valid @RequestBody UserLogin userLogin) {
        String token = loginService.logIn(userLogin);
-        return new ResponseEntity<>(token, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new HashMap<String, String>(1){{put("token", token);}}, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/me")

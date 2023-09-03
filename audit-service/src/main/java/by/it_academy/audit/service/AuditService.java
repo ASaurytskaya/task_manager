@@ -3,12 +3,14 @@ package by.it_academy.audit.service;
 import by.it_academy.audit.core.EssenceType;
 import by.it_academy.audit.core.dto.Audit;
 import by.it_academy.audit.core.dto.AuditCreate;
+import by.it_academy.audit.core.dto.CustomUserDetails;
 import by.it_academy.audit.core.dto.User;
 import by.it_academy.audit.dao.api.IAuditDao;
 import by.it_academy.audit.dao.entity.AuditEntity;
 import by.it_academy.audit.service.api.IAuditService;
 import by.it_academy.audit.service.exception.AuditNotFoundException;
 import by.it_academy.audit.util.TPage;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @Service
 public class AuditService implements IAuditService {
     private static final String AUDIT_NOT_FOUND = "Запись не найдена.";
+
     private final IAuditDao auditDao;
     private final UserFinderService userFinderService;
 
@@ -30,11 +33,12 @@ public class AuditService implements IAuditService {
 
     @Override
     public void save(AuditCreate auditCreate, String token) {
-        User user = userFinderService.getMe(token);
+       CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       // User user = userFinderService.getMe(token);
 
         AuditEntity entity = new AuditEntity();
         entity.setDtCreate(LocalDateTime.now());
-        entity.setUserId(user.getUuid());
+        entity.setUserId(user.getId());
         entity.setMail(user.getMail());
         entity.setFio(user.getFio());
         entity.setRole(user.getUserRole());
@@ -62,7 +66,7 @@ public class AuditService implements IAuditService {
         pageResult.setSize(size);
         pageResult.setTotal_element(countEntities);
         pageResult.setFirst(page == 0);
-        pageResult.setLast(page == countPages - 1);
+        pageResult.setLast(countPages == 0 || page == countPages - 1);
         int count = 0;
         pageResult.setContent(new ArrayList<>());
         for(int i = page * size; i <= (page + 1) * size && i < countEntities; i++) {

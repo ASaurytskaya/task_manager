@@ -18,17 +18,15 @@ public class MailVerification {
         return mail;
     }
 
-    public MailVerification setMail(String mail) {
+    public void setMail(String mail) {
         this.mail = mail;
-        return this;
     }
 
     public UUID getCode() {
         return code;
     }
 
-    public MailVerification setCode(UUID code) {
+    public void setCode(UUID code) {
         this.code = code;
-        return this;
     }
 }

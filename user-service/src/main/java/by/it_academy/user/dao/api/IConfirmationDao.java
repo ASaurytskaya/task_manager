@@ -9,7 +9,5 @@ import java.util.UUID;
 @Repository
 public interface IConfirmationDao extends JpaRepository<ConfirmationEntity, UUID> {
 
-    boolean existsByMail(String mail);
-
     ConfirmationEntity findByMail(String mail);
 }

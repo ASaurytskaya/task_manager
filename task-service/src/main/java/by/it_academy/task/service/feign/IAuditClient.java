@@ -1,6 +1,5 @@
 package by.it_academy.task.service.feign;
 
-
 import by.it_academy.task.core.dto.AuditCreate;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
