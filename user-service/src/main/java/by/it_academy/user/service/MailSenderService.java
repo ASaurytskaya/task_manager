@@ -3,6 +3,7 @@ package by.it_academy.user.service;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,8 +18,9 @@ public class MailSenderService {
         this.mailSender = mailSender;
     }
 
+    @Async()
     public void sendMessage(String mail, UUID code) {
-        String link  = String.format("http://localhost:80/api/v1/users/verification?code=%s&mail=%s", code, mail);
+        String link  = String.format("localhost:80/api/v1/users/verification?code=%s&mail=%s", code, mail);
         String text = String.format(WELCOME_TEXT, link);
 
         SimpleMailMessage message = new SimpleMailMessage();

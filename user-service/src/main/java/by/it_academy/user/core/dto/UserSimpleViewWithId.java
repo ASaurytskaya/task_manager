@@ -2,6 +2,7 @@ package by.it_academy.user.core.dto;
 
 import by.it_academy.user.core.UserRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ public class UserSimpleViewWithId {
 
     private String  fio;
 
+    @JsonProperty("role")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private UserRole userRole;
 

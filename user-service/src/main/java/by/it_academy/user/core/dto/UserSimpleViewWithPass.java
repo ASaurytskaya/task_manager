@@ -2,8 +2,10 @@ package by.it_academy.user.core.dto;
 
 import by.it_academy.user.core.UserRole;
 import by.it_academy.user.core.UserStatus;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,10 +18,12 @@ public class UserSimpleViewWithPass {
     private final String  fio;
 
     @NotNull
+    @JsonProperty("role")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final UserRole userRole;
 
     @NotNull
+    @JsonProperty("status")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final UserStatus userStatus;
 

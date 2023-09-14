@@ -11,9 +11,11 @@ public class UserView {
 
     private final UUID uuid;
 
+    @JsonProperty("dt_create")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final LocalDateTime dtCreate;
 
+    @JsonProperty("dt_update")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final LocalDateTime dtUpdate;
 
@@ -21,9 +23,11 @@ public class UserView {
 
     private final String  fio;
 
+    @JsonProperty("role")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final UserRole userRole;
 
+    @JsonProperty("status")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private final UserStatus userStatus;
 

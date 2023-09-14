@@ -13,15 +13,12 @@ import org.springframework.stereotype.Service;
 public class AuditService {
     private final IAuditClient auditClient;
     private final JwtTokenHandler tokenHandler;
-    private final UserHolder userHolder;
 
-    public AuditService(IAuditClient auditClient, JwtTokenHandler tokenHandler, UserHolder userHolder) {
+    public AuditService(IAuditClient auditClient, JwtTokenHandler tokenHandler) {
         this.auditClient = auditClient;
         this.tokenHandler = tokenHandler;
-        this.userHolder = userHolder;
     }
 
-    //TODO values
     public void saveToAudit(UserEntity entity, String text) {
         UserSimpleViewWithId user = new UserSimpleViewWithId();
         user.setUuid(entity.getUserId());
@@ -29,7 +26,6 @@ public class AuditService {
         user.setFio(entity.getFio());
         user.setUserRole(entity.getUserRole());
 
-//todo info from token only
         AuditCreate auditCreate = new AuditCreate();
         auditCreate.setUser(user);
         auditCreate.setText(text);
