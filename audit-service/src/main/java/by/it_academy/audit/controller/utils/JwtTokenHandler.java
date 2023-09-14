@@ -7,9 +7,7 @@ import by.it_academy.audit.service.exception.TokenInvalidException;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtTokenHandler {

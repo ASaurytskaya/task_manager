@@ -4,6 +4,8 @@ import by.it_academy.audit.core.dto.User;
 import by.it_academy.audit.service.fiegn.IUserClient;
 import org.springframework.stereotype.Service;
 
+
+//todo still need?
 @Service
 public class UserFinderService {
     private IUserClient userClient;

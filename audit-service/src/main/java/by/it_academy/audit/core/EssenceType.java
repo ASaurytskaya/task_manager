@@ -1,7 +1,9 @@
 package by.it_academy.audit.core;
 
 public enum EssenceType {
-    USER ("USER");
+    USER ("USER"),
+    PROJECT("PROJECT"),
+    TASK("TASK");
 
     private String value;
 

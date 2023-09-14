@@ -1,6 +1,5 @@
 package by.it_academy.audit.service;
 
-import by.it_academy.audit.core.EssenceType;
 import by.it_academy.audit.core.dto.Audit;
 import by.it_academy.audit.core.dto.AuditCreate;
 import by.it_academy.audit.core.dto.CustomUserDetails;
@@ -23,18 +22,15 @@ public class AuditService implements IAuditService {
     private static final String AUDIT_NOT_FOUND = "Запись не найдена.";
 
     private final IAuditDao auditDao;
-    private final UserFinderService userFinderService;
 
 
-    public AuditService(IAuditDao auditDao, UserFinderService userFinderService) {
+    public AuditService(IAuditDao auditDao) {
         this.auditDao = auditDao;
-        this.userFinderService = userFinderService;
     }
 
     @Override
     public void save(AuditCreate auditCreate, String token) {
        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       // User user = userFinderService.getMe(token);
 
         AuditEntity entity = new AuditEntity();
         entity.setDtCreate(LocalDateTime.now());

@@ -28,8 +28,6 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-
-    private static final String AUTH_HEADER = "Authorization";
     private static final String BEARER = "Bearer ";
 
     private final JwtTokenHandler jwtHandler;
@@ -44,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        final String header = request.getHeader(AUTH_HEADER);
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (isEmpty(header) || !header.startsWith(BEARER)) {
             chain.doFilter(request, response);
             return;
