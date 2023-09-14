@@ -2,6 +2,7 @@ package by.it_academy.user.core.dto;
 
 import by.it_academy.user.core.UserRole;
 import by.it_academy.user.core.UserStatus;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -14,9 +15,11 @@ public class UserUpdate {
     @NotBlank(message = "Укажите адрес почты")
     private String  fio;
 
+    @JsonAlias("role")
     @NotBlank(message = "Укажите роль пользователя")
     private UserRole userRole;
 
+    @JsonAlias("status")
     @NotBlank(message = "Укажите статус пользователя")
     private UserStatus userStatus;
 

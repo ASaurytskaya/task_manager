@@ -42,7 +42,6 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseStatus
     public ResponseEntity<?> addUser(@Valid @RequestBody UserSimpleViewWithPass user) {
         UserEntity entity = userService.save(user);
         if(entity != null) {
