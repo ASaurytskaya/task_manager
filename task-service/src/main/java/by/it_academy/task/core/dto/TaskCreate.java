@@ -28,44 +28,39 @@ public class TaskCreate {
         return project;
     }
 
-    public TaskCreate setProject(ProjectRef project) {
+    public void setProject(ProjectRef project) {
         this.project = project;
-        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public TaskCreate setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
-        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public TaskCreate setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
     public TaskStatus getStatus() {
         return status;
     }
 
-    public TaskCreate setStatus(TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
-        return this;
     }
 
     public UserRef getImplementer() {
         return implementer;
     }
 
-    public TaskCreate setImplementer(UserRef implementer) {
+    public void setImplementer(UserRef implementer) {
         this.implementer = implementer;
-        return this;
     }
 }

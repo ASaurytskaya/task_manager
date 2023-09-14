@@ -15,7 +15,7 @@ public class UserRefListConverter implements AttributeConverter<List<UserRef>, L
     public List<String> convertToDatabaseColumn(List<UserRef> attribute) {
         List<String> lS = new ArrayList<>();
         for (UserRef userRef : attribute) {
-            lS.add(userRef.getUserID().toString());
+            lS.add(userRef.getUuid().toString());
         }
         return lS;
     }

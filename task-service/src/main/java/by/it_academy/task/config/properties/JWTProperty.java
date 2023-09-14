@@ -1,4 +1,4 @@
-package by.itacademy.task.config.properites;
+package by.it_academy.task.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

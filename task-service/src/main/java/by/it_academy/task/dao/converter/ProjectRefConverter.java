@@ -11,7 +11,7 @@ public class ProjectRefConverter implements AttributeConverter<ProjectRef, Strin
 
     @Override
     public String convertToDatabaseColumn(ProjectRef attribute) {
-        return attribute.getProjectId().toString();
+        return attribute.getUuid().toString();
     }
 
     @Override

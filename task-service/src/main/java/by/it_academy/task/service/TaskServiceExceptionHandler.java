@@ -1,6 +1,5 @@
 package by.it_academy.task.service;
 
-import by.it_academy.task.service.exception.ProjectNotFoundException;
 import by.it_academy.task.service.exception.TaskServiceException;
 import by.it_academy.task.util.errors.ErrorType;
 import by.it_academy.task.util.errors.TErrorResponse;
@@ -44,9 +43,9 @@ public class TaskServiceExceptionHandler {
     }
 
     @ExceptionHandler({Exception.class, Error.class})
-    public ResponseEntity<?> handleAnyError() {
+    public ResponseEntity<?> handleAnyError(Exception e) {
         TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, STATUS_500);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(500));
+        return new ResponseEntity<>(errorResponse + "\n" + e.getMessage(), HttpStatus.valueOf(500));
     }
 
 }

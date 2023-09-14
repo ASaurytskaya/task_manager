@@ -11,7 +11,7 @@ public class UserRefConverter implements AttributeConverter<UserRef, String> {
 
     @Override
     public String convertToDatabaseColumn(UserRef attribute) {
-        return attribute.getUserID().toString();
+        return attribute.getUuid().toString();
     }
 
     @Override

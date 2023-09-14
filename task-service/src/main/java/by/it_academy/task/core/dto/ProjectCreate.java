@@ -17,16 +17,16 @@ public class ProjectCreate {
     private UserRef manager;
 
     @NotNull
-    private List<UserRef> stuff;
+    private List<UserRef> staff;
 
     @NotNull
     private ProjectStatus status;
 
-    public ProjectCreate(String name, String description, UserRef manager, List<UserRef> stuff, ProjectStatus status) {
+    public ProjectCreate(String name, String description, UserRef manager, List<UserRef> staff, ProjectStatus status) {
         this.name = name;
         this.description = description;
         this.manager = manager;
-        this.stuff = stuff;
+        this.staff = staff;
         this.status = status;
     }
 
@@ -57,12 +57,12 @@ public class ProjectCreate {
         return this;
     }
 
-    public List<UserRef> getStuff() {
-        return stuff;
+    public List<UserRef> getStaff() {
+        return staff;
     }
 
-    public ProjectCreate setStuff(List<UserRef> stuff) {
-        this.stuff = stuff;
+    public ProjectCreate setStaff(List<UserRef> staff) {
+        this.staff = staff;
         return this;
     }
 

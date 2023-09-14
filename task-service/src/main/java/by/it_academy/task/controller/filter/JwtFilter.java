@@ -1,6 +1,7 @@
-package by.itacademy.task.controller.filter;
+package by.it_academy.task.controller.filter;
 
-import by.itacademy.task.controller.utils.JwtTokenHandler;
+import by.it_academy.task.controller.utils.JwtTokenHandler;
+import by.it_academy.task.core.dto.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +18,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+    private static final String BEARER = "Bearer ";
 
     private final JwtTokenHandler jwtHandler;
 
@@ -38,72 +39,30 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (isEmpty(header) || !header.startsWith("Bearer ")) {
+
+        if (isEmpty(header) || !header.startsWith(BEARER)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
         if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Get user identity and set it on the spring security context
-        // 2 Варианта
-        // 1. Получить данные на user-service через http ответ разобрать и поместить
-        // в переменную userDetails. Сходить на урл /me положив в хэадер токен
-        // 2. Изначально поместить всё в токен и доставать всё из токена
+        //todo only admin in context?
+        CustomUserDetails.CustomUserDetailsBuilder builder = new CustomUserDetails.CustomUserDetailsBuilder();
+        UserDetails userDetails = builder.
+                setId(jwtHandler.getUUID(token)).
+                setMail(jwtHandler.getUsername(token)).
+                setFio(jwtHandler.getFio(token)).
+                setUserRole(jwtHandler.getRole(token)).
+                setUserStatus(jwtHandler.getStatus(token)).build();
 
-        String userName = jwtHandler.getUsername(token);
-        //мой временный вариант
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if("admin".equals(userName)){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
-        UserDetails userDetails = new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return authorities;
-            }
-
-            @Override
-            public String getPassword() {
-                return null;
-            }
-
-            @Override
-            public String getUsername() {
-                return userName;
-            } //пример как доставать из токена
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return false;
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return false;
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return false;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return false;
-            }
-        };
-
-        UsernamePasswordAuthenticationToken
-                authentication = new UsernamePasswordAuthenticationToken(
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,
-                userDetails == null ?
-                        List.of() : userDetails.getAuthorities()
+                userDetails == null ? List.of() : userDetails.getAuthorities()
         );
 
         authentication.setDetails(

@@ -1,20 +1,35 @@
 package by.it_academy.task.core;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserRef {
-    private UUID userID;
+    private UUID uuid;
 
-    public UserRef(UUID userID) {
-        this.userID = userID;
+    public UserRef() {
     }
 
-    public UUID getUserID() {
-        return userID;
+    public UserRef(UUID uuid) {
+        this.uuid = uuid;
     }
 
-    public UserRef setUserID(UUID userID) {
-        this.userID = userID;
-        return this;
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserRef userRef)) return false;
+        return getUuid().equals(userRef.getUuid());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUuid());
     }
 }

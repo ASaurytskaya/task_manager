@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@RestController(value = "api/v1/project")
+@RestController
+@RequestMapping(value = "/api/v1/project")
 public class ProjectController {
     private final IProjectService projectService;
 
@@ -22,8 +23,10 @@ public class ProjectController {
     }
 
     @GetMapping(produces = "application/json")
-    public ResponseEntity<?> getPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-        TPage<ProjectView> viewPage = projectService.getPage(page, size);
+    public ResponseEntity<?> getPage(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "20") int size,
+                                     @RequestParam(defaultValue = "false") boolean archived) {
+        TPage<ProjectView> viewPage = projectService.getPage(page, size, archived);
         return new ResponseEntity<>(viewPage, HttpStatus.valueOf(200));
     }
 

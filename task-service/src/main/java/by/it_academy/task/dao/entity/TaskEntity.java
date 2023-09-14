@@ -15,6 +15,7 @@ import java.util.UUID;
             @Convert(attributeName = "project", converter = ProjectRefConverter.class),
             @Convert(attributeName = "implementer", converter = UserRefConverter.class)
     })
+@Table(name = "task")
 public class TaskEntity {
 
     @Id

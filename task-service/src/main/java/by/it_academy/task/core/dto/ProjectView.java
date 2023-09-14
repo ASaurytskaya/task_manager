@@ -2,17 +2,21 @@ package by.it_academy.task.core.dto;
 
 import by.it_academy.task.core.ProjectStatus;
 import by.it_academy.task.core.UserRef;
+import com.fasterxml.jackson.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public class ProjectView {
+//todo correct order
 
-    private final UUID projectId;
+    private final UUID uuid;
 
+    @JsonProperty("dt_create")
     private final LocalDateTime dtCreate;
 
+    @JsonProperty("dt_update")
     private final LocalDateTime dtUpdate;
 
     private final String name;
@@ -26,7 +30,7 @@ public class ProjectView {
     private final ProjectStatus status;
 
     private ProjectView( ProjectViewBuilder builder) {
-        this.projectId = builder.projectId;
+        this.uuid = builder.uuid;
         this.dtCreate = builder.dtCreate;
         this.dtUpdate = builder.dtUpdate;
         this.name = builder.name;
@@ -36,8 +40,8 @@ public class ProjectView {
         this.status = builder.status;
     }
 
-    public UUID getProjectId() {
-        return projectId;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public LocalDateTime getDtCreate() {
@@ -69,7 +73,7 @@ public class ProjectView {
     }
 
     public static class ProjectViewBuilder {
-        private UUID projectId;
+        private UUID uuid;
 
         private LocalDateTime dtCreate;
 
@@ -88,8 +92,8 @@ public class ProjectView {
         public ProjectViewBuilder() {
         }
 
-        public ProjectViewBuilder setProjectId(UUID projectId) {
-            this.projectId = projectId;
+        public ProjectViewBuilder setUuid(UUID uuid) {
+            this.uuid = uuid;
             return this;
         }
 

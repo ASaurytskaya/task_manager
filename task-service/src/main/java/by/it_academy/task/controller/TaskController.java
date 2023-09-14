@@ -1,5 +1,10 @@
 package by.it_academy.task.controller;
 
+import by.it_academy.task.controller.converter.StringProjectRefConverter;
+import by.it_academy.task.controller.converter.StringUserRefConverter;
+import by.it_academy.task.core.ProjectRef;
+import by.it_academy.task.core.TaskStatus;
+import by.it_academy.task.core.UserRef;
 import by.it_academy.task.core.dto.TaskCreate;
 import by.it_academy.task.core.dto.TaskView;
 import by.it_academy.task.service.api.ITaskService;
@@ -10,20 +15,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-@RestController(value = "api/v1/task")
+@RestController
+@RequestMapping(value = "/api/v1/task")
 public class TaskController {
 
     private final ITaskService taskService;
+    private final StringProjectRefConverter stringProjectRefConverter;
+    private final StringUserRefConverter stringUserRefConverter;
 
-    public TaskController(ITaskService taskService) {
+    public TaskController(ITaskService taskService, StringProjectRefConverter stringProjectRefConverter, StringUserRefConverter stringUserRefConverter) {
         this.taskService = taskService;
+        this.stringProjectRefConverter = stringProjectRefConverter;
+        this.stringUserRefConverter = stringUserRefConverter;
     }
 
     @GetMapping(produces = "application/json")
-    public ResponseEntity<?> getPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-        TPage<TaskView> pageView = taskService.getPage(page, size);
+    public ResponseEntity<?> getPage(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "20") int size,
+                                     @RequestParam(required = false) List<ProjectRef> project,
+                                     @RequestParam(required = false) List<UserRef> implementer,
+                                     @RequestParam(required = false) List<TaskStatus> status
+    ) {
+
+        TPage<TaskView> pageView = taskService.getPage(page, size, project, implementer, status);
         return new ResponseEntity<>(pageView, HttpStatus.valueOf(200));
     }
 
