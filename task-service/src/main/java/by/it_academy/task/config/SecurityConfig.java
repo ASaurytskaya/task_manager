@@ -43,7 +43,6 @@ public class SecurityConfig {
                     });
         });
 
-            //todo urls
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers(HttpMethod.POST, "api/v1/project").
                     hasAnyRole("ADMIN")

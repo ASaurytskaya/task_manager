@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProjectView {
-//todo correct order
 
     private final UUID uuid;
 
