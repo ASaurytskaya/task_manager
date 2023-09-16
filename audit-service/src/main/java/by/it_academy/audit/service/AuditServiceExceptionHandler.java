@@ -44,9 +44,9 @@ public class AuditServiceExceptionHandler {
     }
 
     @ExceptionHandler({Exception.class, Error.class})
-    public ResponseEntity<?> handleAnyError() {
+    public ResponseEntity<?> handleAnyError(Exception e) {
         TErrorResponse errorResponse = new TErrorResponse(ErrorType.ERROR, STATUS_500);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(500));
+        return new ResponseEntity<>(errorResponse + "\n" + e.getMessage(), HttpStatus.valueOf(500));
     }
 
 }
